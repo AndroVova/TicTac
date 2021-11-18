@@ -21,7 +21,6 @@ public class TikTakGame {
 
         if (new Random().nextBoolean()) {
             makeComputerMove();
-
             printTable(GAME_TABLE);
         }
         while (true) {
@@ -50,7 +49,7 @@ public class TikTakGame {
 
     }
 
-    private static boolean isPlayerWin()  {
+    private static boolean isPlayerWin() {
         return isWinner('X');
     }
 
@@ -70,37 +69,31 @@ public class TikTakGame {
     }
 
     private static boolean isWinner(char ch) {
-        if(isWinnerByCols(ch)){
+        if (isWinnerByCols(ch)) {
             return true;
         }
-        if(isWinnerByRows(ch)){
+        if (isWinnerByRows(ch)) {
             return true;
         }
-        if(isWinnerByLeftToRightDiagonal(ch)){
+        if (isWinnerByLeftToRightDiagonal(ch)) {
             return true;
         }
-        if(isWinnerByRightToLeftDiagonal(ch)){
+        if (isWinnerByRightToLeftDiagonal(ch)) {
             return true;
         }
         return false;
     }
 
     private static boolean isWinnerByRightToLeftDiagonal(char ch) {
-        if (GAME_TABLE[0][2] == GAME_TABLE[1][1] &&
+        return GAME_TABLE[0][2] == GAME_TABLE[1][1] &&
                 GAME_TABLE[1][1] == GAME_TABLE[2][0] &&
-                GAME_TABLE[0][2] == ch) {
-            return true;
-        }
-        return false;
+                GAME_TABLE[0][2] == ch;
     }
 
     private static boolean isWinnerByLeftToRightDiagonal(char ch) {
-        if (GAME_TABLE[0][0] == GAME_TABLE[1][1] &&
+        return GAME_TABLE[0][0] == GAME_TABLE[1][1] &&
                 GAME_TABLE[1][1] == GAME_TABLE[2][2] &&
-                GAME_TABLE[0][0] == ch) {
-            return true;
-        }
-        return false;
+                GAME_TABLE[0][0] == ch;
     }
 
     private static boolean isWinnerByRows(char ch) {
@@ -129,54 +122,53 @@ public class TikTakGame {
     private static void makeComputerMove() {
         System.out.println("Computer move:\n");
         if (GAME_TABLE[1][1] == ' ') {
-            GAME_TABLE[1][1] = 'O';
+            makeMoveToCell('5', 'O');
         } else {
-            char computerWinMove = nextMoveToWin('O');
-            if (computerWinMove != '0') {
-                makeComputerMoveToCell(computerWinMove);
+            char cellNumber = getCellNumberToMakeNextMove('O');
+            if (cellNumber != '0') {
+                makeMoveToCell(cellNumber, 'O');
             } else {
-                char playerWinMove = nextMoveToWin('X');
-                if (playerWinMove != '0') {
-                    makeComputerMoveToCell(playerWinMove);
-                } else if (isOnlyOneO()) {
-
+                cellNumber = getCellNumberToMakeNextMove('X');
+                if (cellNumber != '0') {
+                    makeMoveToCell(cellNumber, 'O');
                 } else {
-                    randomComputerMove();
+                    cellNumber = getCellNumberIfOnlyOneODetected();
+                    if (cellNumber != '0') {
+                        makeMoveToCell(cellNumber, 'O');
+                    } else {
+                        makeRandomComputerMove();
+                    }
                 }
             }
         }
     }
 
-
-    private static boolean isOnlyOneO() {
+    private static char getCellNumberIfOnlyOneODetected() {
         for (int i = 0; i < GAME_TABLE.length; i++) {
             for (int j = 0; j < GAME_TABLE[i].length; j++) {
                 if (GAME_TABLE[i][j] == 'O') {
                     if (i == 1 && j == 1) {
-                        randomComputerMove();
-                        return true;
+                        return '0';
                     } else if (j == 2 || j == 0) {
                         for (int newIndex = 0; newIndex < 3; newIndex++) {
                             if (GAME_TABLE[newIndex][j] == ' ') {
-                                makeComputerMoveToCell(MAPPING_TABLE[newIndex][j]);
-                                return true;
+                                return MAPPING_TABLE[newIndex][j];
                             }
                         }
                     } else if (i == 2 || i == 0) {
                         for (int newIndex = 0; newIndex < 3; newIndex++) {
                             if (GAME_TABLE[i][newIndex] == ' ') {
-                                makeComputerMoveToCell(GAME_TABLE[i][newIndex]);
-                                return true;
+                                return GAME_TABLE[i][newIndex];
                             }
                         }
                     }
                 }
             }
         }
-        return false;
+        return '0';
     }
 
-    private static void randomComputerMove() {
+    private static void makeRandomComputerMove() {
         Random random = new Random();
         while (true) {
             int row = random.nextInt(3);
@@ -188,17 +180,7 @@ public class TikTakGame {
         }
     }
 
-    private static void makeComputerMoveToCell(char cellNumber) {
-        for (int i = 0; i < MAPPING_TABLE.length; i++) {
-            for (int j = 0; j < MAPPING_TABLE[i].length; j++) {
-                if (cellNumber == MAPPING_TABLE[i][j]) {
-                    GAME_TABLE[i][j] = 'O';
-                }
-            }
-        }
-    }
-
-    private static char nextMoveToWin(char ch) {
+    private static char getCellNumberToMakeNextMove(char ch) {
 
         for (int i = 0; i < GAME_TABLE.length; i++) {
             if (GAME_TABLE[i][0] == GAME_TABLE[i][1] && GAME_TABLE[i][0] == ch && GAME_TABLE[i][2] == ' ') {
@@ -245,19 +227,20 @@ public class TikTakGame {
             if (str.length() == 1) {
                 char digit = str.charAt(0);
                 if (digit >= '1' && digit <= '9') {
-                    makePlayerMoveToCell(digit);
+                    makeMoveToCell(digit, 'X');
                     return;
                 }
             }
         }
     }
 
-    private static void makePlayerMoveToCell(char digit) {
+    private static void makeMoveToCell(char cellNumber, char ch) {
         for (int i = 0; i < MAPPING_TABLE.length; i++) {
             for (int j = 0; j < MAPPING_TABLE[i].length; j++) {
-                if (MAPPING_TABLE[i][j] == digit) {
+                if (MAPPING_TABLE[i][j] == cellNumber) {
                     if (GAME_TABLE[i][j] == ' ') {
-                        GAME_TABLE[i][j] = 'X';
+                        GAME_TABLE[i][j] = ch;
+                        return;
                     } else {
                         System.out.println("Cell is not empty. Try Again");
                         makePlayerMove();
@@ -277,6 +260,5 @@ public class TikTakGame {
         }
         System.out.println("-------------\n");
     }
-
-
 }
+
