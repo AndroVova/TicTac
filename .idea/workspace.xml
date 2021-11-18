@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="10a93475-ada0-41f7-886a-b68895096f2d" name="Changes" comment="" />
+    <list default="true" id="10a93475-ada0-41f7-886a-b68895096f2d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tic tac/TikTakGame/TikTakGame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tic tac/TikTakGame/TikTakGame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TikTakGame/TikTakGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TikTakGame/TikTakGame.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="20uP4MbWbV1P2umsnbTwMSMCESk" />
   <component name="ProjectViewState">
