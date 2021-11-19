@@ -1,4 +1,4 @@
-package TikTakGame;
+package tiktakgame;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -75,22 +75,22 @@ public class TikTakGame {
         if (isWinnerByRows(ch)) {
             return true;
         }
-        if (isWinnerByLeftToRightDiagonal(ch)) {
+        if (isWinnerByLeftTopToRightBottomDiagonal(ch)) {
             return true;
         }
-        if (isWinnerByRightToLeftDiagonal(ch)) {
+        if (isWinnerByLeftBottomToRightTopDiagonal(ch)) {
             return true;
         }
         return false;
     }
 
-    private static boolean isWinnerByRightToLeftDiagonal(char ch) {
+    private static boolean isWinnerByLeftBottomToRightTopDiagonal(char ch) {
         return GAME_TABLE[0][2] == GAME_TABLE[1][1] &&
                 GAME_TABLE[1][1] == GAME_TABLE[2][0] &&
                 GAME_TABLE[0][2] == ch;
     }
 
-    private static boolean isWinnerByLeftToRightDiagonal(char ch) {
+    private static boolean isWinnerByLeftTopToRightBottomDiagonal(char ch) {
         return GAME_TABLE[0][0] == GAME_TABLE[1][1] &&
                 GAME_TABLE[1][1] == GAME_TABLE[2][2] &&
                 GAME_TABLE[0][0] == ch;
@@ -117,7 +117,6 @@ public class TikTakGame {
         }
         return false;
     }
-
 
     private static void makeComputerMove() {
         System.out.println("Computer move:\n");
@@ -181,17 +180,48 @@ public class TikTakGame {
     }
 
     private static char getCellNumberToMakeNextMove(char ch) {
+        char cellNumberToMakeNextMove = getCellNumberToMakeNextMoveByCols(ch);
+        if (cellNumberToMakeNextMove != '0')
+            return cellNumberToMakeNextMove;
 
-        for (int i = 0; i < GAME_TABLE.length; i++) {
-            if (GAME_TABLE[i][0] == GAME_TABLE[i][1] && GAME_TABLE[i][0] == ch && GAME_TABLE[i][2] == ' ') {
-                return MAPPING_TABLE[i][2];
-            } else if (GAME_TABLE[i][1] == GAME_TABLE[i][2] && GAME_TABLE[i][1] == ch && GAME_TABLE[i][0] == ' ') {
-                return MAPPING_TABLE[i][0];
-            } else if (GAME_TABLE[i][0] == GAME_TABLE[i][2] && GAME_TABLE[i][0] == ch && GAME_TABLE[i][1] == ' ') {
-                return MAPPING_TABLE[i][1];
-            }
+        cellNumberToMakeNextMove = getCellNumberToMakeNextMoveByRows(ch);
+        if (cellNumberToMakeNextMove != '0')
+            return cellNumberToMakeNextMove;
+
+        cellNumberToMakeNextMove = getCellNumberToMakeNextMoveByLeftTopToRightBottomDiagonal(ch);
+        if (cellNumberToMakeNextMove != '0')
+            return cellNumberToMakeNextMove;
+
+        cellNumberToMakeNextMove = getCellNumberToMakeNextMoveByRightTopToLeftBottomDiagonal(ch);
+        if (cellNumberToMakeNextMove != '0')
+            return cellNumberToMakeNextMove;
+
+        return '0';
+    }
+
+    private static char getCellNumberToMakeNextMoveByRightTopToLeftBottomDiagonal(char ch) {
+        if (GAME_TABLE[1][1] == GAME_TABLE[0][2] && GAME_TABLE[1][1] == ch && GAME_TABLE[2][0] == ' ') {
+            return MAPPING_TABLE[2][0];
+        } else if (GAME_TABLE[2][0] == GAME_TABLE[1][1] && GAME_TABLE[2][0] == ch && GAME_TABLE[0][2] == ' ') {
+            return MAPPING_TABLE[0][2];
+        } else if (GAME_TABLE[2][0] == GAME_TABLE[0][2] && GAME_TABLE[2][0] == ch && GAME_TABLE[1][1] == ' ') {
+            return MAPPING_TABLE[1][1];
         }
+        return '0';
+    }
 
+    private static char getCellNumberToMakeNextMoveByLeftTopToRightBottomDiagonal(char ch) {
+        if (GAME_TABLE[0][0] == GAME_TABLE[1][1] && GAME_TABLE[0][0] == ch && GAME_TABLE[2][2] == ' ') {
+            return MAPPING_TABLE[2][2];
+        } else if (GAME_TABLE[0][0] == GAME_TABLE[2][2] && GAME_TABLE[0][0] == ch && GAME_TABLE[1][1] == ' ') {
+            return MAPPING_TABLE[1][1];
+        } else if (GAME_TABLE[1][1] == GAME_TABLE[2][2] && GAME_TABLE[1][1] == ch && GAME_TABLE[0][0] == ' ') {
+            return MAPPING_TABLE[0][0];
+        }
+        return '0';
+    }
+
+    private static char getCellNumberToMakeNextMoveByRows(char ch) {
         for (int i = 0; i < GAME_TABLE.length; i++) {
             if (GAME_TABLE[0][i] == GAME_TABLE[1][i] && GAME_TABLE[0][i] == ch && GAME_TABLE[2][i] == ' ') {
                 return MAPPING_TABLE[2][i];
@@ -201,21 +231,18 @@ public class TikTakGame {
                 return MAPPING_TABLE[1][i];
             }
         }
+        return '0';
+    }
 
-        if (GAME_TABLE[0][0] == GAME_TABLE[1][1] && GAME_TABLE[0][0] == ch && GAME_TABLE[2][2] == ' ') {
-            return MAPPING_TABLE[2][2];
-        } else if (GAME_TABLE[0][0] == GAME_TABLE[2][2] && GAME_TABLE[0][0] == ch && GAME_TABLE[1][1] == ' ') {
-            return MAPPING_TABLE[1][1];
-        } else if (GAME_TABLE[1][1] == GAME_TABLE[2][2] && GAME_TABLE[1][1] == ch && GAME_TABLE[0][0] == ' ') {
-            return MAPPING_TABLE[0][0];
-        }
-
-        if (GAME_TABLE[1][1] == GAME_TABLE[0][2] && GAME_TABLE[1][1] == ch && GAME_TABLE[2][0] == ' ') {
-            return MAPPING_TABLE[2][0];
-        } else if (GAME_TABLE[2][0] == GAME_TABLE[1][1] && GAME_TABLE[2][0] == ch && GAME_TABLE[0][2] == ' ') {
-            return MAPPING_TABLE[0][2];
-        } else if (GAME_TABLE[2][0] == GAME_TABLE[0][2] && GAME_TABLE[2][0] == ch && GAME_TABLE[1][1] == ' ') {
-            return MAPPING_TABLE[1][1];
+    private static char getCellNumberToMakeNextMoveByCols(char ch) {
+        for (int i = 0; i < GAME_TABLE.length; i++) {
+            if (GAME_TABLE[i][0] == GAME_TABLE[i][1] && GAME_TABLE[i][0] == ch && GAME_TABLE[i][2] == ' ') {
+                return MAPPING_TABLE[i][2];
+            } else if (GAME_TABLE[i][1] == GAME_TABLE[i][2] && GAME_TABLE[i][1] == ch && GAME_TABLE[i][0] == ' ') {
+                return MAPPING_TABLE[i][0];
+            } else if (GAME_TABLE[i][0] == GAME_TABLE[i][2] && GAME_TABLE[i][0] == ch && GAME_TABLE[i][1] == ' ') {
+                return MAPPING_TABLE[i][1];
+            }
         }
         return '0';
     }
@@ -227,27 +254,29 @@ public class TikTakGame {
             if (str.length() == 1) {
                 char digit = str.charAt(0);
                 if (digit >= '1' && digit <= '9') {
-                    makeMoveToCell(digit, 'X');
-                    return;
+                    if (makeMoveToCell(digit, 'X')) {
+                        return;
+                    }
                 }
             }
         }
     }
 
-    private static void makeMoveToCell(char cellNumber, char ch) {
+    private static boolean makeMoveToCell(char cellNumber, char ch) {
         for (int i = 0; i < MAPPING_TABLE.length; i++) {
             for (int j = 0; j < MAPPING_TABLE[i].length; j++) {
                 if (MAPPING_TABLE[i][j] == cellNumber) {
                     if (GAME_TABLE[i][j] == ' ') {
                         GAME_TABLE[i][j] = ch;
-                        return;
+                        return true;
                     } else {
                         System.out.println("Cell is not empty. Try Again");
-                        makePlayerMove();
+                        return false;
                     }
                 }
             }
         }
+        return false;
     }
 
     private static void printTable(char[][] table) {
@@ -261,4 +290,3 @@ public class TikTakGame {
         System.out.println("-------------\n");
     }
 }
-
